@@ -2,13 +2,13 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-
+// Подключение к базе данных
 const url = 'mongodb://localhost:27017/main';
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
-const MovieSchema = new mongoose.Schema({ // определяем схему
+// определяем схему
+const MovieSchema = new mongoose.Schema({ 
   title: String,
   category: String,
   year: Number,
@@ -20,24 +20,22 @@ const CategorySchema = new mongoose.Schema({
   title: String,
 });
 
-const DirectorSchema = new mongoose.Schema({
-  fullName: String,
-});
-
-const Movie = mongoose.model('Movie', MovieSchema); // создаем модель по схеме
+// создаем модель по схеме
+const Movie = mongoose.model('Movie', MovieSchema); 
 const Category = mongoose.model('Category', CategorySchema);
-const Director = mongoose.model('Director', DirectorSchema);
 
+// Парсить тело запроса
 app.use(express.json());
 
+// Роут на добавление
 app.post('/movies', async (req, res) => {
   try {
     const movie = await Movie.create({
-      title: 'Matrix',
-      category: 'Fantacy',
-      year: 1999,
-      duration: 98,
-      director: 'Bros Wachovsky'
+      title: req.body.title,
+      category: req.body.category,
+      year: req.body.year,
+      duration: req.body.duration,
+      director: req.body.director
     });
     return res.status(201).send('movie created');
   } catch (err) {
@@ -49,7 +47,7 @@ app.post('/movies', async (req, res) => {
 app.post('/category', async (req, res) => {
   try {
     const category = await Category.create({
-      title: 'Fantacy'
+      title: req.body.title,
     });
     return res.status(201).send('category created');
   } catch (err) {
@@ -59,19 +57,8 @@ app.post('/category', async (req, res) => {
 });
 
 
-app.post('/director', async (req, res) => {
-  try {
-    const director = await Director.create({
-      fullName: 'Steven Spielberg'
-    });
-    return res.status(201).send('director created');
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).send(err);
-  }
-});
 
 
 app.listen(port, () => {
-  console.log(`Server ${port}`)
+  console.log(`Server run at ${port}`)
 })
