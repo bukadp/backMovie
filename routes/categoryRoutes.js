@@ -1,6 +1,6 @@
-const express = require('express')
-const app = express()
-const CategoryModel = require('../models/categoryModel')
+const express = require('express');
+const app = express();
+const CategoryModel = require('../models/categoryModel');
 
 const CreateCategory = app.post('/category', async (req, res) => {
   try {

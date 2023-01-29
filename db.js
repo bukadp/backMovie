@@ -4,6 +4,6 @@ const mongoose = require('mongoose');
 
 const conectDb = () => {
     mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
-} 
+};
 
 module.exports = conectDb;
